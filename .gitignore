@@ -1,0 +1,6 @@
+
+botCredentials.js
+*.key
+*.pem
+*.swp
+node_modules/
