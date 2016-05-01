@@ -23,6 +23,13 @@ app.get("/", function(req, res) {
     res.end("hello world\n");
 });
 
+
+process.on('SIGINT', function () {
+     //handle your on exit code
+     console.log("Exiting, have a nice day");
+     process.exit();
+});
+
 count = 0;
 async.whilst(
     function () { return true; },

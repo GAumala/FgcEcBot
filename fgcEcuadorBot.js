@@ -1,3 +1,5 @@
+
+var START_CMD = "start";
 var HABLA_CMD = "habla";
 
 var JIMMY_BOT = "jimmy";
@@ -76,8 +78,9 @@ function getIndividualResponse(individual) {
         case JORGE_BOT: {
             return createBotMessage(generateRandomMsg(JORGE_PHRASES));
         }
-
     }
+
+    return createBotMessage("No conozco a ese maricon");
 }
 
 module.exports = {
@@ -85,8 +88,12 @@ module.exports = {
     AUDIO_MSG_TYPE : AUDIO_TYPE,
     PHOTO_MSG_TYPE : PHOTO_TYPE,
     processTextCommand : function(cmd, text) {
-        if(cmd == HABLA_CMD){
+        switch(cmd){
+            case HABLA_CMD:
             return getIndividualResponse(text.toLowerCase());
+            case START_CMD:
+            return createBotMessage("usa el comando /habla con el nombre del fraud que quieres que te hable.\n" +
+                    "Estan Jimmy, Jorge, Guaso y Daniel");
         }
     }
 };
