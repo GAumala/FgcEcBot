@@ -1,6 +1,5 @@
 var credentials = require("./botCredentials.js");
-var Client = require('node-rest-client').Client;
-var client = new Client();
+var client = require('request');
 var myBot = require("./fgcEcuadorBot.js");
 
 var TELEGRAM_BASE_URL = "https://api.telegram.org/bot";
@@ -63,8 +62,8 @@ function processUpdate(update) {
 
 function sendMessage(chat_id, text){
     var args ="?chat_id=" + chat_id + "&text=" + text;
-    client.get(TELEGRAM_API + SEND_MESSAGE + args, function( data, response) {
-        if(data.ok)
+    client(TELEGRAM_API + SEND_MESSAGE + args, function( error, response, data) {
+        if(response.body.ok)
             console.log("sent: text");
     });
 
@@ -73,15 +72,20 @@ function sendMessage(chat_id, text){
 module.exports = {
     getUpdates : function (){
 	//console.log("offset: " + updateOffset);
-	client.get(TELEGRAM_API + GET_UPDATES + "?offset=" + updateOffset, function( data, response) {
-	    console.log(data);
-	    if(data.ok){
-	        var messages = data.result;
-		var i;
-		for(i = 0; i < messages.length; i++){
-		    processUpdate(messages[i]);
-	    	}
-	    }
+	client({
+            url: TELEGRAM_API + GET_UPDATES + "?offset=" + updateOffset,
+            json: true
+        }, function( error, response, data) {
+            if(!error && response.statusCode == 200) {
+                console.log(response.body);
+                if(response.body.ok){
+                    var messages = response.body.result;
+                    var i;
+                    for(i = 0; i < messages.length; i++){
+                        processUpdate(messages[i]);
+                    }
+                }
+            }
 	});
     }
 };
