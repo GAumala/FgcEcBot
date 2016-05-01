@@ -3,4 +3,6 @@ botCredentials.js
 *.key
 *.pem
 *.swp
+*.jpg
+*.ogg
 node_modules/

@@ -11,6 +11,7 @@ var updateOffset = 0;
 
 var SEND_MESSAGE = "sendMessage";
 var SEND_VOICE = "sendVoice";
+var SEND_PHOTO = "sendPhoto";
 
 function processInlineQuery(inlineQuery){
     //console.log("inline query: " + inlineQuery.query);
@@ -21,7 +22,6 @@ function isACommandMessage(text){
 }
 
 function sendBotMessage(chat_id, msg){
-    console.log("response created");
     switch(msg.type){
         case myBot.TEXT_MSG_TYPE:
             sendMessage(chat_id, msg.content);
@@ -29,6 +29,10 @@ function sendBotMessage(chat_id, msg){
         case myBot.AUDIO_MSG_TYPE:
             sendVoice(chat_id, msg.content);
             break;
+        case myBot.PHOTO_MSG_TYPE:
+            sendPhoto(chat_id, msg.content);
+            break;
+
     }
 }
 
@@ -81,13 +85,27 @@ function sendVoice(chat_id, filepath){
     var formData = {
         chat_id : chat_id,
         voice : fs.createReadStream(filepath)
-    }
+    };
     client.post({url: TELEGRAM_API + SEND_VOICE, 
                 json : true,
                 formData: formData },
                 function (error, response, body){
                     if(response.body.ok)
-                        console.log("sent: audio")
+                        console.log("sent: audio");
+                });
+}
+
+function sendPhoto(chat_id, filepath){
+    var formData = {
+        chat_id : chat_id,
+        photo : fs.createReadStream(filepath)
+    };
+    client.post({url: TELEGRAM_API + SEND_PHOTO, 
+                json : true,
+                formData: formData },
+                function (error, response, body){
+                    if(response.body.ok)
+                        console.log("sent: photo");
                 });
 }
 
@@ -107,6 +125,8 @@ module.exports = {
                         processUpdate(messages[i]);
                     }
                 }
+            } else {
+                console.log(error);
             }
 	});
     }
