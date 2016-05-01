@@ -32,6 +32,10 @@ function sendBotMessage(chat_id, msg){
         case myBot.PHOTO_MSG_TYPE:
             sendPhoto(chat_id, msg.content);
             break;
+        case myBot.MARKDOWN_MSG_TYPE:
+            sendMarkdown(chat_id, msg.content);
+            break;
+
 
     }
 }
@@ -77,6 +81,16 @@ function sendMessage(chat_id, text){
     client(TELEGRAM_API + SEND_MESSAGE + args, function( error, response, data) {
         if(response.body.ok)
             console.log("sent: text");
+    });
+
+}
+
+function sendMarkdown(chat_id, text){
+    var args ="?chat_id=" + chat_id + "&text=" + text +
+         "&parse_mode=Markdown";
+    client(TELEGRAM_API + SEND_MESSAGE + args, function( error, response, data) {
+        if(response.body.ok)
+            console.log("sent: markdown");
     });
 
 }

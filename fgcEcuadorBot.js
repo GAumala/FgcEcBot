@@ -8,8 +8,9 @@ var DANIEL_BOT = "daniel";
 var JORGE_BOT = "jorge";
 
 var TEXT_TYPE = 0;
-var AUDIO_TYPE = 1;
-var PHOTO_TYPE = 2;
+var MD_TYPE = 1;
+var AUDIO_TYPE = 2;
+var PHOTO_TYPE = 3;
 
 var JIMMY_PHRASES = ["maricon hijueputa, maricon",
                      "te voy a sacar la puta",
@@ -40,17 +41,34 @@ var JORGE_PHRASES = ["ROSARIOOOO!",
 
 
 
-function getTypeFromMessage(str){
+function getTypeFromArrayMessage(str){
     if(str.endsWith(".ogg"))
         return AUDIO_TYPE;
     else if(str.endsWith(".jpg"))
         return PHOTO_TYPE;
     else
-        return TEXT_TYPE;
+        return MD_TYPE;
 }
 
-function createBotMessage(msgContent) {
-    var msgType = getTypeFromMessage(msgContent);
+function createTextMessage(msgContent) {
+    var resp = {
+        type : TEXT_TYPE,
+        content : msgContent
+    };
+    return resp;
+}
+
+function capitalizeFirstLetter(string) {
+   return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function createBotMessage(sender, msgContent) {
+    var msgType = getTypeFromArrayMessage(msgContent);
+    if(msgType == MD_TYPE){
+        sender = capitalizeFirstLetter(sender);
+        msgContent = "*" + sender + "*: " + msgContent;
+        console.log("msgContent: " + msgContent);
+    }
     var resp = {
         type : msgType,
         content : msgContent
@@ -67,32 +85,33 @@ function generateRandomMsg(array) {
 function getIndividualResponse(individual) {
     switch(individual) {
         case JIMMY_BOT: {
-            return createBotMessage(generateRandomMsg(JIMMY_PHRASES));
+            return createBotMessage(JIMMY_BOT, generateRandomMsg(JIMMY_PHRASES));
         }
         case GUASO_BOT: {
-            return createBotMessage(generateRandomMsg(GUASO_PHRASES));
+            return createBotMessage(GUASO_BOT, generateRandomMsg(GUASO_PHRASES));
         }
         case DANIEL_BOT: {
-            return createBotMessage(generateRandomMsg(DANIEL_PHRASES));
+            return createBotMessage(DANIEL_BOT, generateRandomMsg(DANIEL_PHRASES));
         }
         case JORGE_BOT: {
-            return createBotMessage(generateRandomMsg(JORGE_PHRASES));
+            return createBotMessage(JORGE_BOT, generateRandomMsg(JORGE_PHRASES));
         }
     }
 
-    return createBotMessage("No conozco a ese maricon");
+    return createTextMessage("No conozco a ese maricon");
 }
 
 module.exports = {
     TEXT_MSG_TYPE : TEXT_TYPE,
     AUDIO_MSG_TYPE : AUDIO_TYPE,
     PHOTO_MSG_TYPE : PHOTO_TYPE,
+    MARKDOWN_MSG_TYPE : MD_TYPE,
     processTextCommand : function(cmd, text) {
         switch(cmd){
             case HABLA_CMD:
             return getIndividualResponse(text.toLowerCase());
             case START_CMD:
-            return createBotMessage("usa el comando /habla con el nombre del fraud que quieres que te hable.\n" +
+            return createTextMessage("usa el comando /habla con el nombre del fraud que quieres que te hable.\n" +
                     "Estan Jimmy, Jorge, Guaso y Daniel");
         }
     }
