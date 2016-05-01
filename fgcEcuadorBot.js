@@ -38,7 +38,7 @@ function generateRandomMsg(array) {
 }
 
 function getIndividualResponse(individual) {
-    //return createBotMessage(1, "audio/jorge02.ogg");
+    return createBotMessage(1, "audio/jorge02.ogg");
     switch(individual) {
         case JIMMY_BOT: {
             return createBotMessage(0, generateRandomMsg(JIMMY_PHRASES));

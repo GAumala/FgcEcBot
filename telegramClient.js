@@ -1,6 +1,7 @@
 var credentials = require("./botCredentials.js");
 var client = require('request');
 var myBot = require("./fgcEcuadorBot.js");
+var fs = require('fs');
 
 var TELEGRAM_BASE_URL = "https://api.telegram.org/bot";
 var TELEGRAM_API = TELEGRAM_BASE_URL + credentials.BOT_TOKEN + '/';
@@ -9,6 +10,7 @@ var GET_UPDATES = "getUpdates";
 var updateOffset = 0;
 
 var SEND_MESSAGE = "sendMessage";
+var SEND_VOICE = "sendVoice";
 
 function processInlineQuery(inlineQuery){
     //console.log("inline query: " + inlineQuery.query);
@@ -20,8 +22,14 @@ function isACommandMessage(text){
 
 function sendBotMessage(chat_id, msg){
     console.log("response created");
-    if(msg.type == myBot.TEXT_MSG_TYPE)
-        sendMessage(chat_id, msg.content);
+    switch(msg.type){
+        case myBot.TEXT_MSG_TYPE:
+            sendMessage(chat_id, msg.content);
+            break;
+        case myBot.AUDIO_MSG_TYPE:
+            sendVoice(chat_id, msg.content);
+            break;
+    }
 }
 
 /*
@@ -67,6 +75,20 @@ function sendMessage(chat_id, text){
             console.log("sent: text");
     });
 
+}
+
+function sendVoice(chat_id, filepath){
+    var formData = {
+        chat_id : chat_id,
+        voice : fs.createReadStream(filepath)
+    }
+    client.post({url: TELEGRAM_API + SEND_VOICE, 
+                json : true,
+                formData: formData },
+                function (error, response, body){
+                    if(response.body.ok)
+                        console.log("sent: audio")
+                });
 }
 
 module.exports = {

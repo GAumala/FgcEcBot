@@ -23,7 +23,7 @@ app.get("/", function(req, res) {
     res.end("hello world\n");
 });
 
-count = 0
+count = 0;
 async.whilst(
     function () { return true; },
     function (callback) {
@@ -34,6 +34,6 @@ async.whilst(
         }, 2000);
     },
     function (err, n) {
-	console.log("long polling over")
+	console.log("long polling over");
     }
 );
