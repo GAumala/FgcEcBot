@@ -3,7 +3,7 @@ const https = require('https');
 const http = require('http');
 const fs = require('fs');
 const async = require('async');
-const telegram = require('./telegramClient.js');
+const updates = require('./updatesHandler.js');
 
 const options = {
     key: fs.readFileSync('MYPRIVATE.key'),
@@ -34,7 +34,7 @@ var count = 0;
 async.whilst(
     function () { return true; },
     function (callback) {
-	telegram.getUpdates();
+	updates.getUpdates();
 	count++;
         setTimeout(function () {
             callback(null, count);

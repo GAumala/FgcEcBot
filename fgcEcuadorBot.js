@@ -1,4 +1,4 @@
-
+const telegram = require("./telegramClient.js")
 const START_CMD = "start";
 const HABLA_CMD = "habla";
 
@@ -39,7 +39,10 @@ const JORGE_PHRASES = ["ROSARIOOOO!",
                      "audio/jorge01.ogg",
                      "audio/jorge02.ogg"];
 
+const HELP_MSG = "usa el comando /habla con el nombre del fraud que quieres que te hable.\n" +
+                    "Estan Jimmy, Jorge, Guaso y Daniel"
 
+const MEMBER_ERROR_MSG = "No conozco a ese maricon"
 
 function getTypeFromArrayMessage(str){
     if(str.endsWith(".ogg"))
@@ -50,55 +53,56 @@ function getTypeFromArrayMessage(str){
         return MD_TYPE;
 }
 
-function createTextMessage(msgContent) {
-    var resp = {
-        type : TEXT_TYPE,
-        content : msgContent
-    };
-    return resp;
+function getMarkdownName(member){
+    member = capitalizeFirstLetter(member)
+    return "*" + member + "*: " 
 }
 
 function capitalizeFirstLetter(string) {
    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function createBotMessage(sender, msgContent) {
-    var msgType = getTypeFromArrayMessage(msgContent);
-    if(msgType == MD_TYPE){
-        sender = capitalizeFirstLetter(sender);
-        msgContent = "*" + sender + "*: " + msgContent;
-        console.log("msgContent: " + msgContent);
-    }
-    var resp = {
-        type : msgType,
-        content : msgContent
-    };
-    return resp;
+function replyToCommand(chat_id, member){
+    var randomMsg = generateRandomMsg(member)
+    if(!randomMsg)
+        telegram.sendMessage(chat_id, MEMBER_ERROR_MSG)
+    else
+        switch(getTypeFromArrayMessage(randomMsg)){
+            case MD_TYPE:
+                sender = getMarkdownName(member)
+                telegram.sendMarkdown(chat_id, sender + randomMsg)
+                break;
+            case AUDIO_TYPE:
+                telegram.sendVoice(chat_id, randomMsg)
+                break;
+            case PHOTO_TYPE:
+                telegram.sendPhoto(chat_id, randomMsg)
+                break;
+        }
 }
 
-function generateRandomMsg(array) {
-    var rand = Math.floor(Math.random() * array.length);
-    return array[rand];
-
-}
-
-function getIndividualResponse(individual) {
-    switch(individual) {
-        case JIMMY_BOT: {
-            return createBotMessage(JIMMY_BOT, generateRandomMsg(JIMMY_PHRASES));
-        }
-        case GUASO_BOT: {
-            return createBotMessage(GUASO_BOT, generateRandomMsg(GUASO_PHRASES));
-        }
-        case DANIEL_BOT: {
-            return createBotMessage(DANIEL_BOT, generateRandomMsg(DANIEL_PHRASES));
-        }
-        case JORGE_BOT: {
-            return createBotMessage(JORGE_BOT, generateRandomMsg(JORGE_PHRASES));
-        }
+function generateRandomMsg(member) {
+    var array;
+    switch(member.toLowerCase()){
+        case JIMMY_BOT:
+            array = JIMMY_PHRASES
+            break;
+        case GUASO_BOT:
+            array = GUASO_PHRASES
+            break;
+        case DANIEL_BOT:
+            array = DANIEL_PHRASES
+            break;
+        case JORGE_BOT:
+            array = JORGE_PHRASES
+            break;
     }
 
-    return createTextMessage("No conozco a ese maricon");
+    if(array){
+        let rand = Math.floor(Math.random() * array.length);
+        return array[rand];
+    }
+
 }
 
 module.exports = {
@@ -106,13 +110,15 @@ module.exports = {
     AUDIO_MSG_TYPE : AUDIO_TYPE,
     PHOTO_MSG_TYPE : PHOTO_TYPE,
     MARKDOWN_MSG_TYPE : MD_TYPE,
-    processTextCommand : function(cmd, text) {
+    processTextCommand : function(cmd, text, message) {
+        let chat_id = message.chat.id;
         switch(cmd){
             case HABLA_CMD:
-            return getIndividualResponse(text.toLowerCase());
+                replyToCommand(chat_id, text)
+                break;
             case START_CMD:
-            return createTextMessage("usa el comando /habla con el nombre del fraud que quieres que te hable.\n" +
-                    "Estan Jimmy, Jorge, Guaso y Daniel");
+                telegram.sendMessage(chat_id, HELP_MSG);
+                break;
         }
     }
 };
