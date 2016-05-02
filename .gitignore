@@ -5,4 +5,5 @@ botCredentials.js
 *.swp
 *.jpg
 *.ogg
+.jshintrc
 node_modules/

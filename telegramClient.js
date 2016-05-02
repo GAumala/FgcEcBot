@@ -1,20 +1,20 @@
-var credentials = require("./botCredentials.js");
-var client = require('request');
-var myBot = require("./fgcEcuadorBot.js");
-var fs = require('fs');
+const credentials = require("./botCredentials.js");
+const client = require('request');
+const myBot = require("./fgcEcuadorBot.js");
+const fs = require('fs');
 
-var TELEGRAM_BASE_URL = "https://api.telegram.org/bot";
-var TELEGRAM_API = TELEGRAM_BASE_URL + credentials.BOT_TOKEN + '/';
+const TELEGRAM_BASE_URL = "https://api.telegram.org/bot";
+const TELEGRAM_API = TELEGRAM_BASE_URL + credentials.BOT_TOKEN + '/';
 
-var GET_UPDATES = "getUpdates";
+const GET_UPDATES = "getUpdates";
 var updateOffset = 0;
 
-var SEND_MESSAGE = "sendMessage";
-var SEND_VOICE = "sendVoice";
-var SEND_PHOTO = "sendPhoto";
+const SEND_MESSAGE = "sendMessage";
+const SEND_VOICE = "sendVoice";
+const SEND_PHOTO = "sendPhoto";
 
 function processInlineQuery(inlineQuery){
-    //console.log("inline query: " + inlineQuery.query);
+    console.log("inline query: " + inlineQuery.query);
 }
 
 function isACommandMessage(text){
@@ -51,7 +51,7 @@ function processMessageText(message){
         var cmd;
         if(spaceIndex != -1) {
             cmd = message.text.substring(1, spaceIndex);
-            var str = message.text.substr(spaceIndex + 1);
+            let str = message.text.substr(spaceIndex + 1);
             reply = myBot.processTextCommand(cmd.toLowerCase(), str);
         } else {
             cmd = message.text.substr(1).toLowerCase();
@@ -133,9 +133,8 @@ module.exports = {
             if(!error && response.statusCode == 200) {
                 console.log(response.body);
                 if(response.body.ok){
-                    var messages = response.body.result;
-                    var i;
-                    for(i = 0; i < messages.length; i++){
+                    let messages = response.body.result;
+                    for(let i = 0; i < messages.length; i++){
                         processUpdate(messages[i]);
                     }
                 }

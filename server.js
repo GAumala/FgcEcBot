@@ -1,17 +1,17 @@
-var express = require('express');
-var https = require('https');
-var http = require('http');
-var fs = require('fs');
-var async = require('async');
-var telegram = require('./telegramClient.js');
+const express = require('express');
+const https = require('https');
+const http = require('http');
+const fs = require('fs');
+const async = require('async');
+const telegram = require('./telegramClient.js');
 
-var options = {
+const options = {
     key: fs.readFileSync('MYPRIVATE.key'),
     cert: fs.readFileSync('MYPUBLIC.pem')
 };
 
 // Create a service (the app object is just a callback).
-var app = express();
+const app = express();
 
 // Create an HTTP service.
 http.createServer(app).listen(8080);
@@ -30,7 +30,7 @@ process.on('SIGINT', function () {
      process.exit();
 });
 
-count = 0;
+var count = 0;
 async.whilst(
     function () { return true; },
     function (callback) {

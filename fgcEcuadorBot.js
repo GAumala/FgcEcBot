@@ -1,18 +1,18 @@
 
-var START_CMD = "start";
-var HABLA_CMD = "habla";
+const START_CMD = "start";
+const HABLA_CMD = "habla";
 
-var JIMMY_BOT = "jimmy";
-var GUASO_BOT = "guaso";
-var DANIEL_BOT = "daniel";
-var JORGE_BOT = "jorge";
+const JIMMY_BOT = "jimmy";
+const GUASO_BOT = "guaso";
+const DANIEL_BOT = "daniel";
+const JORGE_BOT = "jorge";
 
-var TEXT_TYPE = 0;
-var MD_TYPE = 1;
-var AUDIO_TYPE = 2;
-var PHOTO_TYPE = 3;
+const TEXT_TYPE = 0;
+const MD_TYPE = 1;
+const AUDIO_TYPE = 2;
+const PHOTO_TYPE = 3;
 
-var JIMMY_PHRASES = ["maricon hijueputa, maricon",
+const JIMMY_PHRASES = ["maricon hijueputa, maricon",
                      "te voy a sacar la puta",
                      "audio/jimmy01.ogg",
                      "audio/jimmy02.ogg",
@@ -20,7 +20,7 @@ var JIMMY_PHRASES = ["maricon hijueputa, maricon",
                      "photo/jimmy02.jpg",
                      "por que no te vas a la verga?",
                      "Alguien quiere salsearme?"];
-var GUASO_PHRASES = ["BUBU!, vales harta paloma",
+const GUASO_PHRASES = ["BUBU!, vales harta paloma",
                      "audio/guaso01.ogg",
                      "audio/guaso02.ogg",
                      "audio/guaso03.ogg",
@@ -29,11 +29,11 @@ var GUASO_PHRASES = ["BUBU!, vales harta paloma",
                      "Yo soy tu verdugo!",
                      "soniaras conmigo papa, soy tu peor pesadilla.",
                      "Que se lleve todo menos mi play pls"];
-var DANIEL_PHRASES = ["Si la ves a belen pls dile que me llame",
+const DANIEL_PHRASES = ["Si la ves a belen pls dile que me llame",
                      "Quiero mandarle a belen los tornados de rashid por la papaya.",
                      "aplasto todos los botones!!",
                      "INFILCHOLO!!"];
-var JORGE_PHRASES = ["ROSARIOOOO!",
+const JORGE_PHRASES = ["ROSARIOOOO!",
                      "OSCAAAAR!",
                      "waso campeon!",
                      "audio/jorge01.ogg",
