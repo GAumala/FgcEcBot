@@ -26,6 +26,10 @@ const GUASO_PHRASES = ["BUBU!, vales harta paloma",
                      "audio/guaso03.ogg",
                      "photo/guaso01.jpg",
                      "photo/guaso02.jpg",
+                     "photo/guaso03.jpg",
+                     "photo/guaso04.jpg",
+                     "photo/guaso05.jpg",
+                     "photo/guaso06.jpg",
                      "Yo soy tu verdugo!",
                      "soniaras conmigo papa, soy tu peor pesadilla.",
                      "Que se lleve todo menos mi play pls"];
@@ -69,7 +73,7 @@ function replyToCommand(chat_id, member){
     else
         switch(getTypeFromArrayMessage(randomMsg)){
             case MD_TYPE:
-                sender = getMarkdownName(member)
+                let sender = getMarkdownName(member)
                 telegram.sendMarkdown(chat_id, sender + randomMsg)
                 break;
             case AUDIO_TYPE:
