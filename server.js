@@ -1,10 +1,13 @@
-const express = require('express');
-const https = require('https');
-const http = require('http');
-const fs = require('fs');
+//const express = require('express');
+//const https = require('https');
+//const http = require('http');
+//const fs = require('fs');
 const async = require('async');
 const updates = require('./updatesHandler.js');
 
+const fgcBot = require('./fgcEcuadorBot.js')
+updates.addBot(fgcBot)
+/*
 const options = {
     key: fs.readFileSync('MYPRIVATE.key'),
     cert: fs.readFileSync('MYPUBLIC.pem')
@@ -23,21 +26,19 @@ app.get("/", function(req, res) {
     res.end("hello world\n");
 });
 
-
 process.on('SIGINT', function () {
      //handle your on exit code
      console.log("Exiting, have a nice day");
      process.exit();
 });
+*/
 
-var count = 0;
 async.whilst(
     function () { return true; },
     function (callback) {
 	updates.getUpdates();
-	count++;
         setTimeout(function () {
-            callback(null, count);
+            callback(null);
         }, 2000);
     },
     function (err, n) {

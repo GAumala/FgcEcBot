@@ -1,11 +1,12 @@
 const telegram = require("./telegramClient.js")
-const myBot = require("./fgcEcuadorBot.js") 
+//const myBot = require("./fgcEcuadorBot.js") 
+const bots = []
 const GET_UPDATES = "getUpdates";
 const client = require('request');
 
-var updateOffset = 0;
+var botIndex = 0
 
-function processInlineQuery(inlineQuery){
+function processInlineQuery(inlineQuery, myBot){
     console.log("inline query: " + inlineQuery.query);
 }
 
@@ -25,7 +26,7 @@ function extractCommand(string){
 /*
  * This message object is guaranteed to hace a text attribute
  */ 
-function processMessageText(message){
+function processMessageText(message, myBot){
     //console.log("message text: " + text);
     if(isACommandMessage(message.text)){
         var spaceIndex = message.text.indexOf(' ');
@@ -43,26 +44,32 @@ function processMessageText(message){
    }
 }
 
-function processMessage(message){
+function processMessage(message, myBot){
     //console.log("message: " + message);
     if(message.text)
-	processMessageText(message);
+	processMessageText(message, myBot);
 }
 
-function processUpdate(update) {
-    updateOffset = update.update_id + 1;
-    if(update.inline_query)
-	processInlineQuery(update.inline_query);
-    if(update.message)
-        processMessage(update.message);
+function processUpdate(update, myBot) {
+    
+    var newOffset = update.update_id + 1;
+    if(newOffset > myBot.updateOffset){
+        myBot.updateOffset = newOffset
+        if(update.inline_query)
+            processInlineQuery(update.inline_query, myBot);
+        if(update.message)
+            processMessage(update.message, myBot);
+    }
 }
 
 
 module.exports = {
     getUpdates : function (){
 	//console.log("offset: " + updateOffset);
+        const selectedBot = bots[botIndex%bots.length]
 	client({
-            url: telegram.TELEGRAM_API + GET_UPDATES + "?offset=" + updateOffset,
+            url: telegram.getBaseUrl(selectedBot.getToken()) + GET_UPDATES + 
+                "?offset=" + selectedBot.updateOffset,
             json: true
         }, function( error, response, data) {
             if(!error && response.statusCode == 200) {
@@ -70,12 +77,19 @@ module.exports = {
                 if(response.body.ok){
                     let messages = response.body.result;
                     for(let i = 0; i < messages.length; i++){
-                        processUpdate(messages[i]);
+                        processUpdate(messages[i], selectedBot);
                     }
                 }
             } else {
                 console.log(error);
             }
 	});
+        selectedBot.updateIndex
+        botIndex++;
+    },
+
+    addBot : function (bot){
+        bots.push(bot)
     }
+
 };

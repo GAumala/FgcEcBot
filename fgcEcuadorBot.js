@@ -1,4 +1,5 @@
 const telegram = require("./telegramClient.js")
+const credentials = require("./botCredentials.js")
 const START_CMD = "start";
 const HABLA_CMD = "habla";
 
@@ -7,10 +8,12 @@ const GUASO_BOT = "guaso";
 const DANIEL_BOT = "daniel";
 const JORGE_BOT = "jorge";
 
-const TEXT_TYPE = 0;
+//const TEXT_TYPE = 0;
 const MD_TYPE = 1;
 const AUDIO_TYPE = 2;
 const PHOTO_TYPE = 3;
+
+var token = credentials.getToken()
 
 const JIMMY_PHRASES = ["maricon hijueputa, maricon",
                      "te voy a sacar la puta",
@@ -69,18 +72,18 @@ function capitalizeFirstLetter(string) {
 function replyToCommand(chat_id, member){
     var randomMsg = generateRandomMsg(member)
     if(!randomMsg)
-        telegram.sendMessage(chat_id, MEMBER_ERROR_MSG)
+        telegram.sendMessage(chat_id, MEMBER_ERROR_MSG, token)
     else
         switch(getTypeFromArrayMessage(randomMsg)){
             case MD_TYPE:
                 let sender = getMarkdownName(member)
-                telegram.sendMarkdown(chat_id, sender + randomMsg)
+                telegram.sendMarkdown(chat_id, sender + randomMsg, token)
                 break;
             case AUDIO_TYPE:
-                telegram.sendVoice(chat_id, randomMsg)
+                telegram.sendVoice(chat_id, randomMsg, token)
                 break;
             case PHOTO_TYPE:
-                telegram.sendPhoto(chat_id, randomMsg)
+                telegram.sendPhoto(chat_id, randomMsg, token)
                 break;
         }
 }
@@ -110,10 +113,6 @@ function generateRandomMsg(member) {
 }
 
 module.exports = {
-    TEXT_MSG_TYPE : TEXT_TYPE,
-    AUDIO_MSG_TYPE : AUDIO_TYPE,
-    PHOTO_MSG_TYPE : PHOTO_TYPE,
-    MARKDOWN_MSG_TYPE : MD_TYPE,
     processTextCommand : function(cmd, text, message) {
         let chat_id = message.chat.id;
         switch(cmd){
@@ -121,8 +120,12 @@ module.exports = {
                 replyToCommand(chat_id, text)
                 break;
             case START_CMD:
-                telegram.sendMessage(chat_id, HELP_MSG);
+                telegram.sendMessage(chat_id, HELP_MSG, token);
                 break;
         }
+    },
+    updateOffset : 0,
+    getToken : function () {
+        return token
     }
 };
