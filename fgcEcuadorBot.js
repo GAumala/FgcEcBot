@@ -127,5 +127,8 @@ module.exports = {
     updateOffset : 0,
     getToken : function () {
         return token
+    },
+    processTextMessage : function (message) {
+        console.log("fgc txt msg: " + message.text)
     }
 };

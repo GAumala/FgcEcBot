@@ -41,7 +41,8 @@ function processMessageText(message, myBot){
             cmd = extractCommand(cmd)
             myBot.processTextCommand(cmd, "", message);
         }
-   }
+   } else
+       myBot.processTextMessage(message)
 }
 
 function processMessage(message, myBot){
@@ -84,7 +85,6 @@ module.exports = {
                 console.log(error);
             }
 	});
-        selectedBot.updateIndex
         botIndex++;
     },
 

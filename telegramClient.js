@@ -1,11 +1,13 @@
 const client = require('request');
 const fs = require('fs');
+const utf8 = require('utf8');
 
 const TELEGRAM_BASE_URL = "https://api.telegram.org/bot";
 
 const SEND_MESSAGE = "sendMessage";
 const SEND_VOICE = "sendVoice";
 const SEND_PHOTO = "sendPhoto";
+const SEND_LOCATION = "sendLocation";
 
 var defaultToken = ""
 
@@ -49,6 +51,7 @@ function sendMediaFile(type, chat_id, filepath, token){
 
 exports.sendMessage = function (chat_id, text, token){
 
+    text = utf8.encode(text)
     var myToken = selectToken(token)
 
     var args ="?chat_id=" + chat_id + "&text=" + text
@@ -67,6 +70,18 @@ exports.sendMarkdown = function(chat_id, text, token){
     client(exports.getBaseUrl(myToken) + SEND_MESSAGE + args, function( error, response, data) {
         if(response.body.ok)
             console.log("sent: " + text);
+    });
+
+}
+
+exports.sendLocation = function(chat_id, lat, lon, token){
+
+    var myToken = selectToken(token)
+    var args ="?chat_id=" + chat_id + "&latitude=" + lat +
+         "&longitude=" + lon;
+    client(exports.getBaseUrl(myToken) + SEND_LOCATION + args, function( error, response, data) {
+        if(response.body.ok)
+            console.log("sent: location");
     });
 
 }
