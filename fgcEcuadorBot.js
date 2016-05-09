@@ -1,4 +1,4 @@
-const telegram = require("./telegramClient.js")
+const telegram = require("tgbots")
 const credentials = require("./botCredentials.js")
 const START_CMD = "start";
 const HABLA_CMD = "habla";
