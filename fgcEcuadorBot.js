@@ -1,7 +1,10 @@
+const chalk = require('chalk')
 const telegram = require("tgbots")
-const credentials = require("./botCredentials.js")
+const credentials = require("./credentials.js")
 const START_CMD = "start";
 const HABLA_CMD = "habla";
+const STOP_CMD = "stop";
+const HELP_CMD = "help";
 
 const JIMMY_BOT = "jimmy";
 const GUASO_BOT = "guaso";
@@ -49,7 +52,13 @@ const JORGE_PHRASES = ["ROSARIOOOO!",
 const HELP_MSG = "usa el comando /habla con el nombre del fraud que quieres que te hable.\n" +
                     "Estan Jimmy, Jorge, Guaso y Daniel"
 
+const SUBSCRIBED_MSG = "Desde ahora, voy a enviarles updates del EVO"
+const UNSUBSCRIBED_MSG = "Ya no les voy a envíar más updates del EVO"
+const ALREADY_SUBBED_MSG = "Ya estás en mi lista."
+const NOT_SUBBED_MSG = "No estás en mi lista."
 const MEMBER_ERROR_MSG = "No conozco a ese maricon"
+
+const twitterSubs = []
 
 function getTypeFromArrayMessage(str){
     if(str.endsWith(".ogg"))
@@ -62,7 +71,7 @@ function getTypeFromArrayMessage(str){
 
 function getMarkdownName(member){
     member = capitalizeFirstLetter(member)
-    return "*" + member + "*: " 
+    return "*" + member + "*: "
 }
 
 function capitalizeFirstLetter(string) {
@@ -112,6 +121,14 @@ function generateRandomMsg(member) {
 
 }
 
+function broadcastNewTweet(tweet) {
+  console.log("NEW TWEET!: " + JSON.stringify(tweet));
+  const baseTwitterURL = "https://twitter.com/" + tweet.user.screen_name + "/status/"
+  twitterSubs.forEach(function (conversation){
+    telegram.sendMessage(conversation, baseTwitterURL + tweet.id_str, token);
+  })
+}
+
 module.exports = {
     processTextCommand : function(cmd, text, message) {
         let chat_id = message.chat.id;
@@ -120,7 +137,19 @@ module.exports = {
                 replyToCommand(chat_id, text)
                 break;
             case START_CMD:
-                telegram.sendMessage(chat_id, HELP_MSG, token);
+                if(!twitterSubs.includes(chat_id)){
+                  twitterSubs.push(chat_id)
+                  telegram.sendMessage(chat_id, SUBSCRIBED_MSG, token);
+                } else
+                  telegram.sendMessage(chat_id, ALREADY_SUBBED_MSG, token);
+                break;
+            case STOP_CMD:
+                const unsubbedChatIndex = twitterSubs.indexOf(chat_id)
+                if(unsubbedChatIndex > -1){
+                  twitterSubs.splice(unsubbedChatIndex, 1)
+                  telegram.sendMessage(chat_id, UNSUBSCRIBED_MSG, token);
+                } else
+                  telegram.sendMessage(chat_id, NOT_SUBBED_MSG, token);
                 break;
         }
     },
@@ -130,5 +159,13 @@ module.exports = {
     },
     processTextMessage : function (message) {
         console.log("fgc txt msg: " + message.text)
+    },
+
+    onNewTweet : function(stream){
+      stream.on('data', broadcastNewTweet)
+
+      stream.on('error', function(error) {
+        console.log(chalk.red(error))
+      });
     }
 };

@@ -1,5 +1,4 @@
-
-botCredentials.js
+credentials.js
 *.key
 *.pem
 *.swp
