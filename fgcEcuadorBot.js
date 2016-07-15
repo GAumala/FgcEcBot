@@ -121,6 +121,9 @@ function generateRandomMsg(member) {
 }
 
 function broadcastNewTweet(tweet) {
+  if(tweet.in_reply_to_status_id_str || tweet.in_reply_to_user_id_str || tweet.retweeted_status) 
+    return //no replies!
+
   console.log("NEW TWEET!: " + JSON.stringify(tweet));
   const baseTwitterURL = "https://twitter.com/" + tweet.user.screen_name + "/status/"
   twitterSubs.forEach(function (conversation){
