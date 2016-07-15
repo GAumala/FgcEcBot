@@ -1,6 +1,5 @@
 const chalk = require('chalk')
 const telegram = require("tgbots")
-const credentials = require("./credentials.js")
 const START_CMD = "start";
 const HABLA_CMD = "habla";
 const STOP_CMD = "stop";
@@ -16,7 +15,7 @@ const MD_TYPE = 1;
 const AUDIO_TYPE = 2;
 const PHOTO_TYPE = 3;
 
-var token = credentials.getToken()
+var token = process.env.TELEGRAM_SECRET_TOKEN
 
 const JIMMY_PHRASES = ["maricon hijueputa, maricon",
                      "te voy a sacar la puta",

@@ -1,14 +1,14 @@
 const request = require("request")
 const Twitter = require("twitter")
-const credentials = require("./credentials.js")
 let stream, tweetListenerBot;
 
 const followedUser = 'EVO'
+console.log("consumer_key: " + process.env.TWITTER_CONSUMER_KEY)
 const client = new Twitter({
-  consumer_key: credentials.getTwConsumerKey(),
-  consumer_secret: credentials.getTwConsumerSecret(),
-  access_token_key: credentials.getTwAccessToken(),
-  access_token_secret: credentials.getTwAccessKey()
+  consumer_key: process.env.TWITTER_CONSUMER_KEY,
+  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+  access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
 
 client.get('users/show', {screen_name: followedUser}, function(error, tweets, response){
