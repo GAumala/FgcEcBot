@@ -1,5 +1,7 @@
 const chalk = require('chalk')
-const telegram = require("tgbots")
+const telegram = require('tgbots')
+
+const twitterSubs = require('./twitterSubs.js')
 const START_CMD = "start";
 const HABLA_CMD = "habla";
 const STOP_CMD = "stop";
@@ -57,7 +59,6 @@ const ALREADY_SUBBED_MSG = "Ya estás en mi lista."
 const NOT_SUBBED_MSG = "No estás en mi lista."
 const MEMBER_ERROR_MSG = "No conozco a ese maricon"
 
-const twitterSubs = []
 
 function getTypeFromArrayMessage(str){
     if(str.endsWith(".ogg"))
@@ -126,7 +127,7 @@ function broadcastNewTweet(tweet) {
 
   console.log("NEW TWEET!: " + JSON.stringify(tweet));
   const baseTwitterURL = "https://twitter.com/" + tweet.user.screen_name + "/status/"
-  twitterSubs.forEach(function (conversation){
+  twitterSubs.list().forEach(function (conversation){
     telegram.sendMessage(conversation, baseTwitterURL + tweet.id_str, token);
     //telegram.sendMessage(conversation, tweet.text, token);
   })
@@ -140,18 +141,15 @@ module.exports = {
                 replyToCommand(chat_id, text)
                 break;
             case START_CMD:
-                if(!twitterSubs.includes(chat_id)){
-                  twitterSubs.push(chat_id)
+                if(twitterSubs.push(chat_id))
                   telegram.sendMessage(chat_id, SUBSCRIBED_MSG, token);
-                } else
+                else
                   telegram.sendMessage(chat_id, ALREADY_SUBBED_MSG, token);
                 break;
             case STOP_CMD:
-                const unsubbedChatIndex = twitterSubs.indexOf(chat_id)
-                if(unsubbedChatIndex > -1){
-                  twitterSubs.splice(unsubbedChatIndex, 1)
+                if(twitterSubs.remove(chat_id))
                   telegram.sendMessage(chat_id, UNSUBSCRIBED_MSG, token);
-                } else
+                else
                   telegram.sendMessage(chat_id, NOT_SUBBED_MSG, token);
                 break;
         }

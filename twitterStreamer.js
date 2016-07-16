@@ -2,7 +2,7 @@ const request = require("request")
 const Twitter = require("twitter")
 let stream, tweetListenerBot;
 
-const usersToFollow = ['EVO', 'CapcomFighters', 'jiyunaJP',
+const usersToFollow = ['EVO', 'CapcomFighters', 'jiyunaJP', 'Furious_blog',
 'GamerBeeTW', 'Yoshi_OnoChin', 'fchampryan', 'kazunoko0215', 'daigothebeast']
 const userIds = []
 
