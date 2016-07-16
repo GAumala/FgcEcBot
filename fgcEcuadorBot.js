@@ -17,7 +17,7 @@ const MD_TYPE = 1;
 const AUDIO_TYPE = 2;
 const PHOTO_TYPE = 3;
 
-var token = process.env.TELEGRAM_SECRET_TOKEN
+const token = process.env.TELEGRAM_SECRET_TOKEN
 
 const JIMMY_PHRASES = ["maricon hijueputa, maricon",
                      "te voy a sacar la puta",
@@ -75,43 +75,43 @@ function getMarkdownName(member){
 }
 
 function capitalizeFirstLetter(string) {
-   return string.charAt(0).toUpperCase() + string.slice(1);
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function replyToCommand(chat_id, member){
-    var randomMsg = generateRandomMsg(member)
+    const randomMsg = generateRandomMsg(member)
     if(!randomMsg)
         telegram.sendMessage(chat_id, MEMBER_ERROR_MSG, token)
     else
         switch(getTypeFromArrayMessage(randomMsg)){
-            case MD_TYPE:
-                let sender = getMarkdownName(member)
-                telegram.sendMarkdown(chat_id, sender + randomMsg, token)
-                break;
-            case AUDIO_TYPE:
-                telegram.sendVoice(chat_id, randomMsg, token)
-                break;
-            case PHOTO_TYPE:
-                telegram.sendPhoto(chat_id, randomMsg, token)
-                break;
+        case MD_TYPE:
+            let sender = getMarkdownName(member)
+            telegram.sendMarkdown(chat_id, sender + randomMsg, token)
+            break;
+        case AUDIO_TYPE:
+            telegram.sendVoice(chat_id, randomMsg, token)
+            break;
+        case PHOTO_TYPE:
+            telegram.sendPhoto(chat_id, randomMsg, token)
+            break;
         }
 }
 
 function generateRandomMsg(member) {
-    var array;
+    let array;
     switch(member.toLowerCase()){
-        case JIMMY_BOT:
-            array = JIMMY_PHRASES
-            break;
-        case GUASO_BOT:
-            array = GUASO_PHRASES
-            break;
-        case DANIEL_BOT:
-            array = DANIEL_PHRASES
-            break;
-        case JORGE_BOT:
-            array = JORGE_PHRASES
-            break;
+    case JIMMY_BOT:
+        array = JIMMY_PHRASES
+        break;
+    case GUASO_BOT:
+        array = GUASO_PHRASES
+        break;
+    case DANIEL_BOT:
+        array = DANIEL_PHRASES
+        break;
+    case JORGE_BOT:
+        array = JORGE_PHRASES
+        break;
     }
 
     if(array){
@@ -122,36 +122,36 @@ function generateRandomMsg(member) {
 }
 
 function broadcastNewTweet(tweet) {
-  if(tweet.in_reply_to_status_id_str || tweet.in_reply_to_user_id_str || tweet.retweeted_status)
-    return //no replies!
+    if(tweet.in_reply_to_status_id_str || tweet.in_reply_to_user_id_str || tweet.retweeted_status)
+        return //no replies!
 
-  console.log("NEW TWEET!: " + JSON.stringify(tweet));
-  const baseTwitterURL = "https://twitter.com/" + tweet.user.screen_name + "/status/"
-  twitterSubs.list().forEach(function (conversation){
-    telegram.sendMessage(conversation, baseTwitterURL + tweet.id_str, token);
+    console.log("NEW TWEET!: " + JSON.stringify(tweet));
+    const baseTwitterURL = "https://twitter.com/" + tweet.user.screen_name + "/status/"
+    twitterSubs.list().forEach(function (conversation){
+        telegram.sendMessage(conversation, baseTwitterURL + tweet.id_str, token);
     //telegram.sendMessage(conversation, tweet.text, token);
-  })
+    })
 }
 
 module.exports = {
     processTextCommand : function(cmd, text, message) {
         let chat_id = message.chat.id;
         switch(cmd){
-            case HABLA_CMD:
-                replyToCommand(chat_id, text)
-                break;
-            case START_CMD:
-                if(twitterSubs.push(chat_id))
-                  telegram.sendMessage(chat_id, SUBSCRIBED_MSG, token);
-                else
+        case HABLA_CMD:
+            replyToCommand(chat_id, text)
+            break;
+        case START_CMD:
+            if(twitterSubs.push(chat_id))
+                telegram.sendMessage(chat_id, SUBSCRIBED_MSG, token);
+            else
                   telegram.sendMessage(chat_id, ALREADY_SUBBED_MSG, token);
-                break;
-            case STOP_CMD:
-                if(twitterSubs.remove(chat_id))
-                  telegram.sendMessage(chat_id, UNSUBSCRIBED_MSG, token);
-                else
+            break;
+        case STOP_CMD:
+            if(twitterSubs.remove(chat_id))
+                telegram.sendMessage(chat_id, UNSUBSCRIBED_MSG, token);
+            else
                   telegram.sendMessage(chat_id, NOT_SUBBED_MSG, token);
-                break;
+            break;
         }
     },
     updateOffset : 0,
@@ -163,10 +163,10 @@ module.exports = {
     },
 
     onNewTweet : function(stream){
-      stream.on('data', broadcastNewTweet)
+        stream.on('data', broadcastNewTweet)
 
-      stream.on('error', function(error) {
-        console.log(chalk.red(error))
-      });
-    }
+        stream.on('error', function(error) {
+            console.log(chalk.red(error))
+        });
+    },
 };

@@ -2,7 +2,8 @@
   "name": "FGCEcuadorBot",
   "version": "0.0.1",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "lint": "eslint fgcEcuadorBot.js index.js twitterSubs.js twitterStreamer.js"
   },
   "engines": {
     "node": "6.3.0"
@@ -11,10 +12,12 @@
     "async": "2.0.0-rc.3",
     "chalk": "^1.1.3",
     "express": "4.13",
-    "nedb": "^1.8.0",
     "node-persist": "0.0.11",
     "tgbots": "^0.8.0",
     "twitter": "^1.3.0",
     "utf8": "^2.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^3.1.0"
   }
 }
