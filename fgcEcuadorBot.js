@@ -6,6 +6,7 @@ const START_CMD = "start";
 const HABLA_CMD = "habla";
 const STOP_CMD = "stop";
 const HELP_CMD = "help";
+const FOLLOWING_CMD = "following";
 
 const JIMMY_BOT = "jimmy";
 const GUASO_BOT = "guaso";
@@ -59,6 +60,10 @@ const ALREADY_SUBBED_MSG = "Ya estás en mi lista."
 const NOT_SUBBED_MSG = "No estás en mi lista."
 const MEMBER_ERROR_MSG = "No conozco a ese maricon"
 
+
+const usersToFollow = ['EVO', 'CapcomFighters', 'jiyunaJP', 'Furious_blog',
+'Persia_xo', 'XianMSG', 'AZAngelic', 'IFCYipeS',
+'GamerBeeTW', 'Yoshi_OnoChin', 'fchampryan', 'kazunoko0215', 'daigothebeast']
 
 function getTypeFromArrayMessage(str){
     if(str.endsWith(".ogg"))
@@ -133,6 +138,14 @@ function broadcastNewTweet(tweet) {
     })
 }
 
+function getFollowingsMessage() {
+    let msg = "Puedo envíar en tiempo real tweets de estas cuentas:\n"
+    usersToFollow.forEach(function (user){
+        msg += user + '\n'
+    });
+    return msg
+}
+
 module.exports = {
     processTextCommand : function(cmd, text, message) {
         let chat_id = message.chat.id;
@@ -152,6 +165,8 @@ module.exports = {
             else
                   telegram.sendMessage(chat_id, NOT_SUBBED_MSG, token);
             break;
+        case FOLLOWING_CMD:
+            telegram.sendMessage(chat_id, getFollowingsMessage(), token)
         }
     },
     updateOffset : 0,
@@ -162,11 +177,13 @@ module.exports = {
         console.log("fgc txt msg: " + message.text)
     },
 
-    onNewTweet : function(stream){
+    setTwitterStream : function(stream){
         stream.on('data', broadcastNewTweet)
 
         stream.on('error', function(error) {
             console.log(chalk.red(error))
         });
     },
+
+    usersToFollow: usersToFollow,
 };
