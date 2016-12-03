@@ -3,4 +3,6 @@ credentials.js
 *.pem
 *.swp
 .jshintrc
+persist
+run.sh
 node_modules/
