@@ -1,5 +1,6 @@
 const chalk = require('chalk')
 const telegram = require('tgbots')
+const fs  = require('fs')
 
 const twitterSubs = require('./twitterSubs.js')
 const START_CMD = "start";
@@ -8,62 +9,15 @@ const STOP_CMD = "stop";
 const HELP_CMD = "help";
 const FOLLOWING_CMD = "following";
 
-const JIMMY_BOT = "jimmy";
-const GUASO_BOT = "guaso";
-const DANIEL_BOT = "daniel";
-const JORGE_BOT = "jorge";
-
-//const TEXT_TYPE = 0;
 const MD_TYPE = 1;
 const AUDIO_TYPE = 2;
 const PHOTO_TYPE = 3;
 
 const token = process.env.TELEGRAM_SECRET_TOKEN
 
-const JIMMY_PHRASES = ["maricon hijueputa, maricon",
-                     "te voy a sacar la puta",
-                     "audio/jimmy01.ogg",
-                     "audio/jimmy02.ogg",
-                     "photo/jimmy01.jpg",
-                     "photo/jimmy02.jpg",
-                     "por que no te vas a la verga?",
-                     "Alguien quiere salsearme?"];
-const GUASO_PHRASES = ["BUBU!, vales harta paloma",
-                     "audio/guaso01.ogg",
-                     "audio/guaso02.ogg",
-                     "audio/guaso03.ogg",
-                     "photo/guaso01.jpg",
-                     "photo/guaso02.jpg",
-                     "photo/guaso03.jpg",
-                     "photo/guaso04.jpg",
-                     "photo/guaso05.jpg",
-                     "photo/guaso06.jpg",
-                     "Yo soy tu verdugo!",
-                     "soniaras conmigo papa, soy tu peor pesadilla.",
-                     "Que se lleve todo menos mi play pls"];
-const DANIEL_PHRASES = ["Si la ves a belen pls dile que me llame",
-                     "Quiero mandarle a belen los tornados de rashid por la papaya.",
-                     "aplasto todos los botones!!",
-                     "INFILCHOLO!!"];
-const JORGE_PHRASES = ["ROSARIOOOO!",
-                     "OSCAAAAR!",
-                     "waso campeon!",
-                     "audio/jorge01.ogg",
-                     "audio/jorge02.ogg"];
-
-const HELP_MSG = "usa el comando /habla con el nombre del fraud que quieres que te hable.\n" +
-                    "Estan Jimmy, Jorge, Guaso y Daniel"
-
-const SUBSCRIBED_MSG = "Desde ahora, voy a enviarles updates del EVO"
-const UNSUBSCRIBED_MSG = "Ya no les voy a envíar más updates del EVO"
-const ALREADY_SUBBED_MSG = "Ya estás en mi lista."
-const NOT_SUBBED_MSG = "No estás en mi lista."
 const MEMBER_ERROR_MSG = "No conozco a ese maricon"
 
-
-const usersToFollow = ['EVO', 'CapcomFighters', 'jiyunaJP', 'Furious_blog',
-'Persia_xo', 'XianMSG', 'AZAngelic', 'IFCYipeS',
-'GamerBeeTW', 'Yoshi_OnoChin', 'fchampryan', 'kazunoko0215', 'daigothebeast']
+const config = JSON.parse(fs.readFileSync('config.json').toString())
 
 function getTypeFromArrayMessage(str){
     if(str.endsWith(".ogg"))
@@ -103,27 +57,11 @@ function replyToCommand(chat_id, member){
 }
 
 function generateRandomMsg(member) {
-    let array;
-    switch(member.toLowerCase()){
-    case JIMMY_BOT:
-        array = JIMMY_PHRASES
-        break;
-    case GUASO_BOT:
-        array = GUASO_PHRASES
-        break;
-    case DANIEL_BOT:
-        array = DANIEL_PHRASES
-        break;
-    case JORGE_BOT:
-        array = JORGE_PHRASES
-        break;
-    }
-
+    let array = config.phrases[member.toLowerCase()]
     if(array){
         let rand = Math.floor(Math.random() * array.length);
         return array[rand];
     }
-
 }
 
 function broadcastNewTweet(tweet) {
@@ -140,7 +78,7 @@ function broadcastNewTweet(tweet) {
 
 function getFollowingsMessage() {
     let msg = "Puedo envíar en tiempo real tweets de estas cuentas:\n"
-    usersToFollow.forEach(function (user){
+    config.following.forEach(function (user){
         msg += user + '\n'
     });
     return msg
@@ -153,17 +91,20 @@ module.exports = {
         case HABLA_CMD:
             replyToCommand(chat_id, text)
             break;
+        case HELP_CMD:
+            telegram.sendMessage(chat_id, config.helpMsg, token);
+            break;
         case START_CMD:
             if(twitterSubs.push(chat_id))
-                telegram.sendMessage(chat_id, SUBSCRIBED_MSG, token);
+                telegram.sendMessage(chat_id, config.subscribedMsg, token);
             else
-                  telegram.sendMessage(chat_id, ALREADY_SUBBED_MSG, token);
+                  telegram.sendMessage(chat_id, config.alreadySubbedMsg, token);
             break;
         case STOP_CMD:
             if(twitterSubs.remove(chat_id))
-                telegram.sendMessage(chat_id, UNSUBSCRIBED_MSG, token);
+                telegram.sendMessage(chat_id, config.unsubscribedMsg, token);
             else
-                  telegram.sendMessage(chat_id, NOT_SUBBED_MSG, token);
+                  telegram.sendMessage(chat_id, config.notSubbedMsg, token);
             break;
         case FOLLOWING_CMD:
             telegram.sendMessage(chat_id, getFollowingsMessage(), token)
@@ -185,5 +126,5 @@ module.exports = {
         });
     },
 
-    usersToFollow: usersToFollow,
+    usersToFollow: config.following,
 };

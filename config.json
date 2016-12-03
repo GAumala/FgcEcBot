@@ -1,0 +1,65 @@
+{
+    "following": [
+        "EVO", 
+        "CapcomFighters", 
+        "jiyunaJP", 
+        "Furious_blog",
+        "Persia_xo", 
+        "XianMSG", 
+        "AZAngelic", 
+        "IFCYipeS",
+        "GamerBeeTW", 
+        "Yoshi_OnoChin", 
+        "fchampryan", 
+        "kazunoko0215", 
+        "daigothebeast"
+    ]
+,
+    "phrases": {
+        "daniel": [
+            "Si la ves a belen pls dile que me llame",
+            "Quiero mandarle a belen los tornados de rashid por la papaya.",
+            "aplasto todos los botones!!",
+            "INFILCHOLO!!"
+        ],
+        "jorge": [
+            "ROSARIOOOO!",
+            "OSCAAAAR!",
+            "waso campeon!",
+            "audio/jorge01.ogg",
+            "audio/jorge02.ogg"
+        ],
+        "guaso": [
+            "BUBU!, vales harta paloma",
+            "audio/guaso01.ogg",
+            "audio/guaso02.ogg",
+            "audio/guaso03.ogg",
+            "photo/guaso01.jpg",
+            "photo/guaso02.jpg",
+            "photo/guaso03.jpg",
+            "photo/guaso04.jpg",
+            "photo/guaso05.jpg",
+            "photo/guaso06.jpg",
+            "Yo soy tu verdugo!",
+            "soniaras conmigo papa, soy tu peor pesadilla.",
+            "Que se lleve todo menos mi play pls"
+        ],
+        "jimmy": [
+            "maricon hijueputa, maricon",
+            "te voy a sacar la puta",
+            "audio/jimmy01.ogg",
+            "audio/jimmy02.ogg",
+            "photo/jimmy01.jpg",
+            "photo/jimmy02.jpg",
+            "por que no te vas a la verga?",
+            "Alguien quiere salsearme?"
+        ]
+    },
+    "subscribedMsg": "Desde ahora, voy a enviarles updates de la Capcom Cup 2016",
+    "unsubscribedMsg": "Ya no les voy a envíar más updates de la Capcom Cup 2016",
+    "alreadySubbedMsg": "Ya estás en mi lista.",
+    "notSubbedMsg": "No estás en mi lista.",
+    "helpMsg": "usa el comando /habla con el nombre del fraud que quieres que te hable.\nEstan Jimmy, Jorge, Guaso y Daniel.\nSi usas el comando /start te enviare tweets relevates a algún evento actual hasta que envíes el comando /stop. Puedes consultar la lista de cuentas que sigo con el comando /following."
+
+
+}
