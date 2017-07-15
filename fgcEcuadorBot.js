@@ -3,6 +3,8 @@ const telegram = require('tgbots')
 const fs  = require('fs')
 
 const twitterSubs = require('./twitterSubs.js')
+const config = require('./config.json')
+
 const START_CMD = "start";
 const HABLA_CMD = "habla";
 const STOP_CMD = "stop";
@@ -15,9 +17,9 @@ const PHOTO_TYPE = 3;
 
 const token = process.env.TELEGRAM_SECRET_TOKEN
 
-const MEMBER_ERROR_MSG = "No conozco a ese maricon"
+if (token === undefined) throw Error(`Environemnt variable TELEGRAM_SECRET_TOKEN not set.`)
 
-const config = JSON.parse(fs.readFileSync('config.json').toString())
+const MEMBER_ERROR_MSG = "No conozco a ese maricon"
 
 function getTypeFromArrayMessage(str){
     if(str.endsWith(".ogg"))

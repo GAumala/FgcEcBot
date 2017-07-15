@@ -1,18 +1,25 @@
 {
     "following": [
-        "EVO", 
-        "CapcomFighters", 
-        "jiyunaJP", 
+        "EVO",
+        "CapcomFighters",
+        "jiyunaJP",
         "Furious_blog",
-        "Persia_xo", 
-        "XianMSG", 
-        "AZAngelic", 
+        "Persia_xo",
+        "XianMSG",
+        "AZAngelic",
         "IFCYipeS",
-        "GamerBeeTW", 
-        "Yoshi_OnoChin", 
-        "fchampryan", 
-        "kazunoko0215", 
-        "daigothebeast"
+        "GamerBeeTW",
+        "Yoshi_OnoChin",
+        "fchampryan",
+        "kazunoko0215",
+        "daigothebeast",
+        "jchensor",
+        "ultradavid",
+        "fubarduck",
+        "INFILTRATION85",
+        "ArcSystemWorksU",
+        "TEKKEN",
+        "ESPN_Esports"
     ]
 ,
     "phrases": {
@@ -55,8 +62,8 @@
             "Alguien quiere salsearme?"
         ]
     },
-    "subscribedMsg": "Desde ahora, voy a enviarles updates de la Capcom Cup 2016",
-    "unsubscribedMsg": "Ya no les voy a envíar más updates de la Capcom Cup 2016",
+    "subscribedMsg": "Desde ahora, voy a enviarles updates del EVO 2017",
+    "unsubscribedMsg": "Ya no les voy a envíar más updates del EVO 2017",
     "alreadySubbedMsg": "Ya estás en mi lista.",
     "notSubbedMsg": "No estás en mi lista.",
     "helpMsg": "usa el comando /habla con el nombre del fraud que quieres que te hable.\nEstan Jimmy, Jorge, Guaso y Daniel.\nSi usas el comando /start te enviare tweets relevates a algún evento actual hasta que envíes el comando /stop. Puedes consultar la lista de cuentas que sigo con el comando /following."
